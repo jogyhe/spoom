@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lan.common.dao.UserMapper">
+
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.lan.common.model.User">
+        <result column="user_id" property="userId"/>
+        <result column="email" property="email"/>
+        <result column="user_name" property="userName"/>
+        <result column="password" property="password"/>
+        <result column="roles" property="roles"/>
+        <result column="create_time" property="createTime"/>
+        <result column="enabled" property="enabled"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gender" property="gender"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        `user_id`,
+        `email`,
+        `user_name`,
+        `password`,
+        `roles`,
+        `create_time`,
+        `enabled`,
+        `last_login_time`,
+        `avatar`,
+        `gender`
+    </sql>
+
+    <select id="getUserByEmail" resultType="com.lan.common.model.User">
+        SELECT <include refid="Base_Column_List"/> FROM user WHERE user.email = #{email}
+    </select>
+
+    <update id="updateUser">
+        UPDATE user
+        <set>
+            <if test="user.email != null"> `email` = #{user.email}, </if>
+            <if test="user.userName != null"> `user_name` = #{user.userName}, </if>
+            <if test="user.password != null"> `password` = #{user.password}, </if>
+            <if test="user.roles != null"> `roles` = #{user.roles}, </if>
+            <if test="user.enabled != null"> `enabled` = #{user.enabled}, </if>
+            <if test="user.lastLoginTime != null"> `last_login_time` = #{user.lastLoginTime}, </if>
+            <if test="user.avatar != null"> `avatar` = #{user.avatar}, </if>
+            <if test="user.gender != null"> `gender` = #{user.gender} </if>
+        </set>
+        WHERE `user_id` = #{user.userId}
+    </update>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="user.userId">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user.userId!=null"> `user_id`,</if>
+            <if test="user.email!=null"> `email`,</if>
+            <if test="user.userName!=null"> `user_name`,</if>
+            <if test="user.password!=null"> `password`,</if>
+            <if test="user.roles!=null"> `roles`,</if>
+            <if test="user.createTime!=null"> `create_time`,</if>
+            <if test="user.enabled!=null"> `enabled`,</if>
+            <if test="user.lastLoginTime!=null"> `last_login_time`,</if>
+            <if test="user.avatar!=null"> `avatar`,</if>
+            <if test="user.gender!=null"> `gender`,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="user.userId!=null">#{user.userId},</if>
+            <if test="user.email!=null">#{user.email},</if>
+            <if test="user.userName!=null">#{user.userName},</if>
+            <if test="user.password!=null">#{user.password},</if>
+            <if test="user.roles!=null">#{user.roles},</if>
+            <if test="user.createTime!=null">#{user.createTime},</if>
+            <if test="user.enabled!=null">#{user.enabled},</if>
+            <if test="user.lastLoginTime!=null">#{user.lastLoginTime},</if>
+            <if test="user.avatar!=null">#{user.avatar},</if>
+            <if test="user.gender!=null">#{user.gender},</if>
+        </trim>
+    </insert>
+</mapper>

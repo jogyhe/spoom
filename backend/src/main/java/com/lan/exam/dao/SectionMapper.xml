@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lan.exam.dao.SectionMapper">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.lan.exam.model.Section">
+        <result column="section_id" property="sectionId"/>
+        <result column="section_name" property="sectionName"/>
+        <result column="subject_id" property="subjectId"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        `section_id`,
+        `section_name`,
+        `subject_id`
+    </sql>
+
+    <!--Section-->
+    <select id="getAllSection" resultType="com.lan.exam.model.Section">
+        SELECT
+            a.subject_id,
+            b.subject_name,
+            a.section_id,
+            a.section_name
+        FROM section a INNER JOIN subject b ON a.subject_id = b.subject_id
+        ORDER BY a.subject_id, a.section_id
+    </select>
+
+    <select id="getAllSubject" resultType="com.lan.exam.model.Subject">
+        SELECT
+            a.subject_id,
+            a.subject_name,
+            (SELECT count(*)
+             FROM section
+             WHERE section.subject_id = a.subject_id) AS section_num
+        FROM subject a
+        ORDER BY subject_id
+    </select>
+
+    <select id="getSectionsBySubjectId" resultType="com.lan.exam.model.Section">
+        SELECT
+            a.section_id,
+            a.section_name,
+            a.subject_id,
+            (SELECT count(*)
+             FROM question
+             WHERE question.section_id = a.section_id) AS question_num
+        FROM section a
+        WHERE a.subject_id = #{subjectId}
+        ORDER BY a.section_id
+    </select>
+
+    <!--auto generated Code-->
+    <insert id="insertSubject" useGeneratedKeys="true" keyProperty="subject.subjectId">
+        INSERT INTO subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subject.subjectId!=null">`subject_id`,</if>
+            <if test="subject.subjectName!=null">`subject_name`</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subject.subjectId!=null">#{subject.subjectId},</if>
+            <if test="subject.subjectName!=null">#{subject.subjectName}</if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertSection" useGeneratedKeys="true" keyProperty="section.sectionId">
+        INSERT INTO section
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="section.sectionId!=null">`section_id`,</if>
+            <if test="section.sectionName!=null">`section_name`,</if>
+            <if test="section.subjectId!=null">`subject_id`</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="section.sectionId!=null">#{section.sectionId},</if>
+            <if test="section.sectionName!=null">#{section.sectionName},</if>
+            <if test="section.subjectId!=null">#{section.subjectId}</if>
+        </trim>
+    </insert>
+
+    <update id="updateSubject">
+        UPDATE subject
+        <set>
+            <if test="subject.subjectId != null">`subject_id` = #{subject.subjectId},</if>
+            <if test="subject.subjectName != null">`subject_name` = #{subject.subjectName}</if>
+        </set>
+        WHERE `subject_id` = #{subject.subjectId}
+    </update>
+
+    <update id="updateSection">
+        UPDATE section
+        <set>
+            <if test="section.sectionId != null">`section_id` = #{section.sectionId},</if>
+            <if test="section.sectionName != null">`section_name` = #{section.sectionName},</if>
+            <if test="section.subjectId != null">`subject_id` = #{section.subjectId}</if>
+        </set>
+        WHERE `section_id` = #{section.sectionId}
+    </update>
+
+    <delete id="deleteSubject">
+        DELETE FROM subject
+        WHERE subject_id = #{subjectId}
+              AND (SELECT count(*)
+                   FROM section
+                   WHERE section.subject_id = #{subjectId}) = 0
+    </delete>
+
+    <delete id="deleteSection">
+        DELETE FROM section
+        WHERE section_id = #{sectionId}
+              AND (SELECT count(*)
+                   FROM question
+                   WHERE question.section_id = #{sectionId}) = 0
+    </delete>
+</mapper>
+

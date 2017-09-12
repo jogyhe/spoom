@@ -1,0 +1,52 @@
+logging:
+  pattern:
+    console: log@%clr(%d{mm:ss SSS}){blue}%clr(-%5p){red} [%logger] %clr(%m){magenta}%n
+  level:
+    com.lan: debug
+    org.springframework: WARN
+    org.hibernate: WARN
+
+spring:
+  datasource:
+      name: test
+      url: jdbc:mysql://localhost:1024/spoom?useUnicode=true&characterEncoding=utf8&useSSL=true
+      username: lan
+      password: asdf1234
+      ###### 使用druid数据源 ############
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.jdbc.Driver
+      filters: stat
+      maxActive: 20
+      initialSize: 1
+      maxWait: 60000
+      minIdle: 1
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+  http:
+    multipart:
+      max-file-size: 100Mb
+      max-request-size: 100Mb
+      enabled: true
+  cache:
+    ehcache:
+      config: ehcache.xml
+
+#port
+server:
+  port: 8080
+mybatis:
+  mapper-locations: classpath:com/lan/**/dao/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+
+
+
+

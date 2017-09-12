@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lan.exam.dao.QuestionMapper">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.lan.exam.model.Question">
+        <result column="question_id" property="questionId"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="answer" property="answer"/>
+        <result column="analysis" property="analysis"/>
+        <result column="question_type_id" property="questionTypeId"/>
+        <result column="visible" property="visible"/>
+        <result column="create_time" property="createTime"/>
+        <result column="last_modify" property="lastModify"/>
+        <result column="creator" property="creator"/>
+        <result column="section_id" property="sectionId"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        `question_id`,
+        `content`,
+        `choice_list`,
+        `answer`,
+        `analysis`,
+        `question_type_id`,
+        `visible`,
+        `create_time`,
+        `last_modify`,
+        `creator`,
+        `section_id`
+    </sql>
+
+    <select id="getQuestionList" resultType="com.lan.exam.model.Question">
+        SELECT
+            q.question_id,
+            q.content,
+            t.name         AS question_type_name,
+            a.subject_name,
+            b.section_name AS section_name
+        FROM question q, question_type t, subject a, section b
+        WHERE q.question_type_id = t.question_type_id AND q.section_id = b.section_id
+              AND b.subject_id = a.subject_id AND q.visible = TRUE
+    </select>
+
+    <select id="getQuestionById" resultType="com.lan.exam.model.Question">
+        SELECT
+            q.question_id,
+            q.question_type_id,
+            q.content,
+            q.answer,
+            q.analysis,
+            q.choice_list,
+            q.section_id,
+            b.subject_name
+        FROM question q, section a, subject b
+        WHERE q.question_id = #{questionId} AND q.section_id = a.section_id AND a.subject_id = b.subject_id
+    </select>
+
+    <delete id="deleteQuestion">
+        DELETE FROM question
+        WHERE question_id = #{questionId}
+    </delete>
+
+    <!--auto generated Code-->
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="question.questionId">
+        INSERT INTO question
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="question.questionId!=null">`question_id`,</if>
+            <if test="question.content!=null">`content`,</if>
+            <if test="question.choiceList!=null">`choice_list`,</if>
+            <if test="question.answer!=null">`answer`,</if>
+            <if test="question.analysis!=null">`analysis`,</if>
+            <if test="question.questionTypeId!=null">`question_type_id`,</if>
+            <if test="question.visible!=null">`is_visible`,</if>
+            <if test="question.createTime!=null">`create_time`,</if>
+            <if test="question.lastModify!=null">`last_modify`,</if>
+            <if test="question.creator!=null">`creator`,</if>
+            <if test="question.sectionId!=null">`section_id`,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="question.questionId!=null">#{question.questionId},</if>
+            <if test="question.content!=null">#{question.content},</if>
+            <if test="question.choiceList!=null">#{question.choiceList},</if>
+            <if test="question.answer!=null">#{question.answer},</if>
+            <if test="question.analysis!=null">#{question.analysis},</if>
+            <if test="question.questionTypeId!=null">#{question.questionTypeId},</if>
+            <if test="question.visible!=null">#{question.visible},</if>
+            <if test="question.createTime!=null">#{question.createTime},</if>
+            <if test="question.lastModify!=null">#{question.lastModify},</if>
+            <if test="question.creator!=null">#{question.creator},</if>
+            <if test="question.sectionId!=null">#{question.sectionId},</if>
+        </trim>
+    </insert>
+
+    <!--auto generated Code-->
+    <insert id="insertList">
+        INSERT INTO question (
+        <include refid="Base_Column_List"/>
+        )VALUES
+        <foreach collection="questions" item="question" index="index" separator=",">
+            (
+            #{question.questionId},
+            #{question.content},
+            #{question.choiceList},
+            #{question.answer},
+            #{question.analysis},
+            #{question.questionTypeId},
+            #{question.isVisible},
+            #{question.createTime},
+            #{question.lastModify},
+            #{question.creator},
+            #{question.sectionId}
+            )
+        </foreach>
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE question
+        <set>
+            <if test="question.questionId != null">`question_id` = #{question.questionId},</if>
+            <if test="question.content != null">`content` = #{question.content},</if>
+            <if test="question.choiceList != null">`choice_list` = #{question.choiceList},</if>
+            <if test="question.answer != null">`answer` = #{question.answer},</if>
+            <if test="question.analysis != null">`analysis` = #{question.analysis},</if>
+            <if test="question.questionTypeId != null">`question_type_id` = #{question.questionTypeId},</if>
+            <if test="question.visible != null">`is_visible` = #{question.visible},</if>
+            <if test="question.createTime != null">`create_time` = #{question.createTime},</if>
+            <if test="question.lastModify != null">`last_modify` = #{question.lastModify},</if>
+            <if test="question.creator != null">`creator` = #{question.creator},</if>
+            <if test="question.sectionId != null">`section_id` = #{question.sectionId}</if>
+        </set>
+        WHERE `question_id` = #{question.questionId}
+    </update>
+</mapper>
+
