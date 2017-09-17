@@ -2,12 +2,12 @@ package com.lan.exam.dao;
 
 import com.lan.exam.model.Section;
 import com.lan.exam.model.Subject;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Mapper
 public interface SectionMapper {
 
     List<Section> getAllSection();

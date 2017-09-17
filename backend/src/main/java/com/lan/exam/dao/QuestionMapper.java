@@ -1,12 +1,12 @@
 package com.lan.exam.dao;
 
 import com.lan.exam.model.Question;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Mapper
 public interface QuestionMapper {
 
     List<Question> getQuestionList();

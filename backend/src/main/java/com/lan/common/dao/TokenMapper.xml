@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lan.common.dao.TokenMapper">
+    <!--auto generated Code-->
+    <resultMap id="BaseResultMap" type="com.lan.common.model.TokenEntity">
+        <result column="user_id" property="userId"
+                jdbcType="INTEGER"/>
+        <result column="token" property="token"
+                jdbcType="VARCHAR"/>
+        <result column="expire_time" property="expireTime"
+                jdbcType="DATE"/>
+        <result column="update_time" property="updateTime"
+                jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="Base_Column_List">
+        `user_id`,
+        `token`,
+        `expire_time`,
+        `update_time`
+    </sql>
+
+    <select id="getByToken" resultType="com.lan.common.model.TokenEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM token WHERE token=#{token}
+    </select>
+
+    <select id="getByUserId" resultType="com.lan.common.model.TokenEntity">
+        SELECT <include refid="Base_Column_List"/> FROM token WHERE user_id=#{userId}
+    </select>
+
+    <!--auto generated Code-->
+    <insert id="insertToken" useGeneratedKeys="true" keyProperty="token.userId">
+        INSERT INTO token (
+            `user_id`,
+            `token`,
+            `expire_time`,
+            `update_time`
+        ) VALUES (
+            #{token.userId,jdbcType=INTEGER},
+            #{token.token,jdbcType=VARCHAR},
+            #{token.expireTime,jdbcType=TIMESTAMP},
+            #{token.updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <!--auto generated Code-->
+    <update id="updateToken">
+        UPDATE token
+        <set>
+            <if test="token.userId != null">`user_id`
+                = #{token.userId,jdbcType=INTEGER},
+            </if>
+            <if test="token.token != null">`token`
+                = #{token.token,jdbcType=VARCHAR},
+            </if>
+            <if test="token.expireTime != null">`expire_time`
+                = #{token.expireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="token.updateTime != null">`update_time`
+                = #{token.updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        WHERE `user_id` = #{token.userId,jdbcType=INTEGER}
+    </update>
+</mapper>
+

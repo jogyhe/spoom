@@ -1,8 +1,8 @@
 package com.lan.common.service;
 
 import com.lan.common.dao.UserMapper;
-import com.lan.common.model.User;
-import com.lan.common.model.utilModel.UserInfo;
+import com.lan.common.model.UserEntity;
+import com.lan.common.model.UserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @author spoomlzx
  * @date 2017/5/29
  */
-@Service
+@Service("UserDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static final Logger LOGGER= LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
@@ -26,9 +26,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserInfo loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user=userMapper.getUserByEmail(username);
+        UserEntity user=userMapper.getUserByEmail(username);
         if(user!=null){
-            LOGGER.info("user: "+user.getUserName()+" had being found");
+            LOGGER.info("user: "+user.getRoles()+" had being found");
             userInfo = new UserInfo(user);
         }
         return userInfo;

@@ -3,7 +3,7 @@
 <mapper namespace="com.lan.common.dao.UserMapper">
 
     <!--auto generated Code-->
-    <resultMap id="BaseResultMap" type="com.lan.common.model.User">
+    <resultMap id="BaseResultMap" type="com.lan.common.model.UserEntity">
         <result column="user_id" property="userId"/>
         <result column="email" property="email"/>
         <result column="user_name" property="userName"/>
@@ -30,7 +30,7 @@
         `gender`
     </sql>
 
-    <select id="getUserByEmail" resultType="com.lan.common.model.User">
+    <select id="getUserByEmail" resultType="com.lan.common.model.UserEntity">
         SELECT <include refid="Base_Column_List"/> FROM user WHERE user.email = #{email}
     </select>
 

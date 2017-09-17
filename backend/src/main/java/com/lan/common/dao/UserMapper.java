@@ -1,8 +1,8 @@
 package com.lan.common.dao;
 
-import com.lan.common.model.User;
+import com.lan.common.model.UserEntity;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 /**
  * package com.lan.dao
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
  * @author spoomlzx
  * @date 2017/5/29
  */
-@Repository
+@Mapper
 public interface UserMapper {
 
-    public User getUserByEmail(String email);
+    UserEntity getUserByEmail(String email);
 
-    public int updateUser(@Param("user") User user);
+    int updateUser(@Param("user") UserEntity user);
 
-    public int insertUser(@Param("user") User user);
+    int insertUser(@Param("user") UserEntity user);
 }

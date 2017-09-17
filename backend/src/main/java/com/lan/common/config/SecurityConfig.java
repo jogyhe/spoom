@@ -1,5 +1,6 @@
 package com.lan.common.config;
 
+import com.lan.common.service.TokenService;
 import com.lan.common.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -9,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -18,21 +18,28 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .and()
-                .httpBasic();
+            .exceptionHandling().accessDeniedHandler(new ApiAccessDeniedHandler()).and()
+            .securityContext().securityContextRepository(new TokenSecurityContextRepository().setAuthenticationManager(this.authenticationManager()))
+            .and()
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/**").permitAll();
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth
+            .authenticationProvider(
+                new TokenAuthenticationProvider()
+                    .setUserDetailsService(userDetailsService)
+                    .setTokenService(tokenService)
+            );
     }
 
 }

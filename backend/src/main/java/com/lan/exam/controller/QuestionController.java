@@ -1,7 +1,7 @@
 package com.lan.exam.controller;
 
-import com.lan.common.model.utilModel.Message;
-import com.lan.common.model.utilModel.UserInfo;
+import com.lan.common.model.Message;
+import com.lan.common.model.UserInfo;
 import com.lan.exam.model.Question;
 import com.lan.exam.model.Section;
 import com.lan.exam.model.Subject;

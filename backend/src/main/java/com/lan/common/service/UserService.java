@@ -1,7 +1,7 @@
 package com.lan.common.service;
 
 import com.lan.common.dao.UserMapper;
-import com.lan.common.model.User;
+import com.lan.common.model.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,22 +17,22 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Transactional
-    public void regUser(User user){
-        try {
-            userMapper.insertUser(user);
-        }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public User testEmail(String email){
-        User user=userMapper.getUserByEmail(email);
+    public UserEntity getUserByEmail(String email) {
+        UserEntity user = userMapper.getUserByEmail(email);
         return user;
     }
 
     @Transactional
-    public void updateUser(User user){
+    public void regUser(UserEntity user) {
+        try {
+            userMapper.insertUser(user);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void updateUser(UserEntity user) {
         try {
             userMapper.updateUser(user);
         } catch (Exception e) {
