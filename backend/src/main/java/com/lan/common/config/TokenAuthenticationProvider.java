@@ -55,6 +55,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Cannot find user by this token!");
         }
         this.preAuthenticationChecks.check(user);
+        //加上缓存功能以后，应当可以从缓存中直接查看是否有该token并进行鉴权，缓存由AuthController 更新
         TokenEntity tokenEntity = this.getTokenService().getByToken(token);
         if (tokenEntity == null) {
             throw new BadCredentialsException("Illegal token, access denied!");

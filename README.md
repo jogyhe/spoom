@@ -9,6 +9,8 @@ This is a admin system.
 
 ## Todolist
 
+- token验证功能    √
+- 使用缓存保存token等信息
 - 封装相关component
 - 完成登录功能
 - 编写util
@@ -38,20 +40,4 @@ npm run build
 
 # build for production and view the bundle analyzer report
 npm run build --report
-```
-
-
-…or create a new repository on the command line
-```
-echo "# hjkulkl" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin https://github.com/spoomlzx/spoom.git
-git push -u origin master
-```
-…or push an existing repository from the command line
-```
-git remote add origin https://github.com/spoomlzx/spoom.git
-git push -u origin master
 ```
