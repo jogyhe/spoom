@@ -53,10 +53,10 @@ public class TokenServiceImpl implements TokenService {
      * 返回给客户端的token为  uuid#userId#expiretime
      * 并使用AES进行加密
      *
-     * @param email
+     * @param username
      * @return
      */
-    public String createToken(Integer userId, String email) {
+    public String createToken(Integer userId, String username) {
         //生成一个uuid存入数据库中的token表
         String token = UUID.randomUUID().toString().replace("-", "");
         //当前时间
@@ -66,7 +66,7 @@ public class TokenServiceImpl implements TokenService {
         Date expireTime = new Date(now.getTime() + 3600 * 12 * 1000);
         logger.info("ExpireTime: " + expireTime.getTime());
 
-        String encryptedToken = token + "#" + email + "#" + expireTime.getTime();
+        String encryptedToken = token + "#" + username + "#" + expireTime.getTime();
         try {
             encryptedToken = Encrypt.aesEncrypt(encryptedToken);
             logger.info("Return token is: " + encryptedToken);
