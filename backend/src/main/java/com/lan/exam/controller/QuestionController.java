@@ -1,7 +1,7 @@
 package com.lan.exam.controller;
 
 import com.lan.common.model.Message;
-import com.lan.common.model.UserInfo;
+import com.lan.common.model.UserEntity;
 import com.lan.exam.model.Question;
 import com.lan.exam.model.Section;
 import com.lan.exam.model.Subject;
@@ -88,16 +88,16 @@ public class QuestionController {
      * 添加creator，createTime属性
      *
      * @param question
-     * @param userInfo
+     * @param userEntity
      * @return
      */
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Message addQuestion(@RequestBody Question question, @AuthenticationPrincipal UserInfo userInfo) {
+    public Message addQuestion(@RequestBody Question question, @AuthenticationPrincipal UserEntity userEntity) {
         Message message = new Message();
         try {
-            question.setCreator(userInfo.getUsername());
+            question.setCreator(userEntity.getNickName());
             question.setCreateTime(new Date());
             question.setLastModify(new Date());
             questionService.addQuestion(question);

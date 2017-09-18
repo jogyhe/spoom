@@ -1,7 +1,10 @@
 package com.lan.common.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -10,12 +13,12 @@ import java.util.Date;
  * @author spoomlzx
  * @date 2017/2/24
  */
-public class UserEntity implements Serializable{
+public class UserEntity implements Serializable {
 
     private static final long serialVersionUID = -6075271582713514662L;
     private Integer userId;
     private String email;
-    private String userName;
+    private String nickName;
     private String password;
     private String roles;
     private Date createTime;
@@ -24,19 +27,9 @@ public class UserEntity implements Serializable{
 
     private String avatar;
     private Integer gender;
-    private String passwordConfirm;
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public String getCreateTimeString(){
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy/MM/dd");
-        return simpleDateFormat.format(this.createTime);
+    public Collection<GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
     }
 
     public String getAvatar() {
@@ -63,12 +56,12 @@ public class UserEntity implements Serializable{
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getPassword() {

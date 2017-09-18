@@ -1,6 +1,7 @@
 package com.lan.common.service;
 
 import com.lan.common.model.TokenEntity;
+import com.lan.common.model.UserEntity;
 
 public interface TokenService {
 
@@ -12,5 +13,5 @@ public interface TokenService {
 
     int updateToken(TokenEntity token);
 
-    String createToken(Integer userId, String email);
+    String createToken(UserEntity userEntity);
 }

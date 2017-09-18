@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="ehcache.xsd"
-         updateCheck="false" monitoring="autodetect"
-         dynamicConfig="true" >
+<ehcache updateCheck="false" name="defaultCache">
 
-    <diskStore path="java.io.tmpdir/ehcache"/>
-
-    <defaultCache
-            maxElementsInMemory="10000"
-            eternal="false"
-            timeToIdleSeconds="3600"
-            timeToLiveSeconds="3600"
-            overflowToDisk="true"
-            maxElementsOnDisk="10000000"
-            diskPersistent="false"
-            diskExpiryThreadIntervalSeconds="120"
-            memoryStoreEvictionPolicy="LRU"
-    />
-    <cache name="event"
-           maxElementsInMemory="10000"
-           eternal="false"
-           timeToIdleSeconds="3600"
-           timeToLiveSeconds="3600"
-           overflowToDisk="true"
-           maxElementsOnDisk="10000000"
-           diskPersistent="false"
-           diskExpiryThreadIntervalSeconds="120"
-           memoryStoreEvictionPolicy="LRU"
-    />
+    <diskStore path="../temp/spoom/ehcache"/>
+    <!-- 默认缓存配置. 自动失效：最后一次访问时间间隔300秒失效，若没有访问过自创建时间600秒失效。-->
+    <defaultCache maxEntriesLocalHeap="1000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+                  overflowToDisk="true" statistics="true"/>
+    <!-- 系统缓存 -->
+    <cache name="tokenCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
 </ehcache>
 
         <!--

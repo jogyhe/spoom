@@ -1,42 +1,18 @@
 package com.lan.common.service;
 
-import com.lan.common.dao.UserMapper;
 import com.lan.common.model.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * package com.lan.service
+ * package com.lan.common.service
  *
- * @author spoomlzx
- * @date 2017/6/10
+ * @author lanzongxiao
+ * @date 2017/9/18
  */
-@Service
-public class UserService {
-    @Autowired
-    private UserMapper userMapper;
+public interface UserService {
 
-    public UserEntity getUserByEmail(String email) {
-        UserEntity user = userMapper.getUserByEmail(email);
-        return user;
-    }
+    UserEntity getUserByEmail(String email);
 
-    @Transactional
-    public void regUser(UserEntity user) {
-        try {
-            userMapper.insertUser(user);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+    void regUser(UserEntity user);
 
-    @Transactional
-    public void updateUser(UserEntity user) {
-        try {
-            userMapper.updateUser(user);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
+    void updateUser(UserEntity user);
 }

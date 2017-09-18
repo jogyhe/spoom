@@ -1,7 +1,7 @@
 package com.lan.common.config;
 
 import com.lan.common.service.TokenService;
-import com.lan.common.service.UserDetailsServiceImpl;
+import com.lan.common.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +17,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserService userService;
     @Autowired
     private TokenService tokenService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .exceptionHandling().accessDeniedHandler(new ApiAccessDeniedHandler()).and()
+            .exceptionHandling().authenticationEntryPoint(new AccessDeniedEntryPoint()) // 当header中没有token时，返回json
+            .accessDeniedHandler(new ApiAccessDeniedHandler()) // 当token认证出错时返回json
+            .and()
             .securityContext().securityContextRepository(new TokenSecurityContextRepository().setAuthenticationManager(this.authenticationManager()))
             .and()
             .csrf().disable()
@@ -37,7 +39,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth
             .authenticationProvider(
                 new TokenAuthenticationProvider()
-                    .setUserDetailsService(userDetailsService)
+                    .setUserService(userService)
                     .setTokenService(tokenService)
             );
     }

@@ -45,7 +45,7 @@ public class TokenSecurityContextRepository implements SecurityContextRepository
                 logger.error(e.getMessage());
             }
         } else {
-            logger.error("There is not token, anonymity call");
+            logger.error("There is no token, anonymity call");
         }
         return securityContext;
     }

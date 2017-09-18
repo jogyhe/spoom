@@ -1,5 +1,6 @@
 package com.lan;
 
+import com.lan.common.model.UserEntity;
 import com.lan.common.service.TokenService;
 import com.lan.common.util.Encrypt;
 import org.junit.Test;
@@ -22,7 +23,10 @@ public class TokenTest {
 
     @Test
     public void testCreateToken() {
-        String encryptedToken = tokenService.createToken(1,"spoomlzx@qq.com");
+        UserEntity userEntity=new UserEntity();
+        userEntity.setEmail("spoomlzx@qq.com");
+        userEntity.setUserId(1);
+        String encryptedToken = tokenService.createToken(userEntity);
         System.out.println("加密过后的token:" + encryptedToken);
         try {
             String tokenString = Encrypt.aesDecrypt(encryptedToken);

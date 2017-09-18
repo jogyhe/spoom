@@ -320,12 +320,12 @@
       <DataType>varchar(60)|0</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="67" parent="12" name="user_name">
+    <column id="67" parent="12" name="nick_name">
       <Position>3</Position>
       <Comment>账号</Comment>
       <DataType>varchar(50)|0</DataType>
       <NotNull>1</NotNull>
-      <DefaultExpression>&apos;普通用户&apos;</DefaultExpression>
+      <DefaultExpression>&apos;V2EXer&apos;</DefaultExpression>
     </column>
     <column id="68" parent="12" name="password">
       <Position>4</Position>
