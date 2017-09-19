@@ -45,12 +45,12 @@ public class TokenTest {
 
     @Test
     public void testGetUser() {
-        TokenEntity tokenEntity = tokenService.getByUserId(1);
-        tokenCache.put(1, tokenEntity);
-        tokenEntity = tokenService.getByUserId(12);
-        TokenEntity entity = tokenCache.get(1);
+        TokenEntity tokenEntity = tokenService.getByUserId(3);
+        tokenCache.put(3, tokenEntity);
+        tokenEntity = tokenService.getByUserId(13);
+        TokenEntity entity = tokenCache.get(3);
         System.out.println("Get cached user: " + entity.getUserId() + " with token: " + entity.getToken());
-        System.out.println("Get cached user: " + tokenEntity.getUserId() + " with token: " + tokenEntity.getToken());
+        System.out.println("Get DB user: " + tokenEntity.getUserId() + " with token: " + tokenEntity.getToken());
     }
 
     @Test
