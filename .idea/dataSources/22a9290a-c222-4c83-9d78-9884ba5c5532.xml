@@ -286,13 +286,11 @@
     </column>
     <column id="60" parent="11" name="expire_time">
       <Position>3</Position>
-      <DataType>datetime|0</DataType>
-      <NotNull>1</NotNull>
+      <DataType>datetime(6)|0</DataType>
     </column>
     <column id="61" parent="11" name="update_time">
       <Position>4</Position>
-      <DataType>datetime|0</DataType>
-      <NotNull>1</NotNull>
+      <DataType>datetime(6)|0</DataType>
     </column>
     <index id="62" parent="11" name="token_token_uindex">
       <ColNames>token</ColNames>

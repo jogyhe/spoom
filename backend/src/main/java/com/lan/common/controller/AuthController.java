@@ -38,8 +38,9 @@ public class AuthController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Message login(@RequestBody UserEntity user) {
-        Message message = new Message(0, "user is not exits");
+        Message message = new Message(0, "User is not exits");
         UserEntity userEntity = null;
+        
         try {
             userEntity = userService.getUserByEmail(user.getEmail());
         } catch (UsernameNotFoundException e) {
@@ -47,17 +48,22 @@ public class AuthController {
         } catch (Exception e) {
             logger.error(e.getClass().getName() + ":" + e.getMessage());
         }
+
         if (userEntity == null) {
-            message.setMsg("login failure");
+            message.setMsg("Login failure");
         } else {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             if (encoder.matches(user.getPassword(), userEntity.getPassword())) {
-                String token = tokenService.createToken(userEntity);
-                message.setCode(1);
-                message.setMsg("login success");
-                message.setData(token);
+                try {
+                    String token = tokenService.createToken(userEntity);
+                    message.setCode(1);
+                    message.setMsg("Login success");
+                    message.setData(token);
+                } catch (Exception e) {
+                    message.setMsg("Login failure");
+                }
             } else {
-                message.setMsg("password invalid");
+                message.setMsg("Password invalid");
             }
         }
         return message;
@@ -77,11 +83,11 @@ public class AuthController {
             String password = encoder.encode(user.getPassword());
             user.setPassword(password);
             userService.regUser(user);
-            message.setMsg("register user success");
+            message.setMsg("Register user success");
         } catch (RuntimeException e) {
             logger.error(e.getClass().getName() + ":" + e.getMessage());
             message.setCode(0);
-            message.setMsg("register user failure");
+            message.setMsg("Register user failure");
         }
         return message;
     }

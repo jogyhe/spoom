@@ -1,5 +1,6 @@
 package com.lan;
 
+import com.lan.common.model.TokenEntity;
 import com.lan.common.model.UserEntity;
 import com.lan.common.service.TokenService;
 import com.lan.common.util.Encrypt;
@@ -8,6 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.cache.Cache;
+import java.util.Date;
 
 /**
  * package com.lan
@@ -21,9 +25,12 @@ public class TokenTest {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private Cache<Integer, TokenEntity> tokenCache;
+
     @Test
     public void testCreateToken() {
-        UserEntity userEntity=new UserEntity();
+        UserEntity userEntity = new UserEntity();
         userEntity.setEmail("spoomlzx@qq.com");
         userEntity.setUserId(1);
         String encryptedToken = tokenService.createToken(userEntity);
@@ -34,6 +41,33 @@ public class TokenTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testGetUser() {
+        TokenEntity tokenEntity = tokenService.getByUserId(1);
+        tokenCache.put(1, tokenEntity);
+        tokenEntity = tokenService.getByUserId(12);
+        TokenEntity entity = tokenCache.get(1);
+        System.out.println("Get cached user: " + entity.getUserId() + " with token: " + entity.getToken());
+        System.out.println("Get cached user: " + tokenEntity.getUserId() + " with token: " + tokenEntity.getToken());
+    }
+
+    @Test
+    public void testTokenTime() {
+        TokenEntity tokenEntity = new TokenEntity();
+
+        TokenEntity t = tokenService.getByUserId(3);
+        tokenEntity.setUserId(3);
+        tokenEntity.setToken("asdf");
+        Date now = new Date();
+        System.out.println("before time: " + now.getTime());
+        tokenEntity.setExpireTime(now);
+        if(t==null){
+            tokenService.insertToken(tokenEntity);
+        }
+        t=tokenService.getByUserId(3);
+        System.out.println("mysql time: " + t.getExpireTime().getTime());
+        System.out.println("now time: " + now.getTime());
     }
 }

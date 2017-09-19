@@ -1,5 +1,6 @@
 package com.lan.common.config;
 
+import com.lan.common.model.TokenEntity;
 import com.lan.common.service.TokenService;
 import com.lan.common.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.cache.Cache;
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
@@ -20,6 +23,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private Cache<Integer, TokenEntity> tokenCache;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -41,6 +46,7 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new TokenAuthenticationProvider()
                     .setUserService(userService)
                     .setTokenService(tokenService)
+                    .setTokenCache(tokenCache)
             );
     }
 

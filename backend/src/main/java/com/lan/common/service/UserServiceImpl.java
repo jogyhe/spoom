@@ -17,6 +17,11 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserMapper userMapper;
 
+    @Override
+    public UserEntity getUserById(Integer userId) {
+        return userMapper.getUserById(userId);
+    }
+
     public UserEntity getUserByEmail(String email) {
         UserEntity user = userMapper.getUserByEmail(email);
         return user;

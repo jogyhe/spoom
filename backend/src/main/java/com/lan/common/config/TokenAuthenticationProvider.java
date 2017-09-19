@@ -14,7 +14,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
 
+import javax.cache.Cache;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * package com.lan.common.config
@@ -27,6 +29,7 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
 
     private UserService userService;
     private TokenService tokenService;
+    private Cache<Integer, TokenEntity> tokenCache;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -40,40 +43,58 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Token is invalid!");
         }
         String token = decryptedToken[0];
-        String email = decryptedToken[1];
+        Integer userId = Integer.valueOf(decryptedToken[1]);
         Date expireTime = new Date(Long.valueOf(decryptedToken[2]));
-        if (token == null || email == null || expireTime == null) {
+        if (token == null || userId == null || expireTime == null) {
             throw new BadCredentialsException("Token is invalid!");
         }
-        logger.info("Token: " + token + " email: " + email + " expireTime: " + expireTime);
+        logger.info("Token: " + token + " userId: " + userId + " expireTime: " + expireTime.getTime());
 
-        UserEntity user;
+        //加上缓存功能以后，应当可以从缓存中直接查看是否有该token并进行鉴权，缓存由AuthController 更新
+        boolean isTokenValid = false;
+        TokenEntity tokenEntity = this.getTokenCache().get(userId);
         try {
-            user = this.getUserService().getUserByEmail(email);
-            if (user == null) {
+            isTokenValid = checkToken(tokenEntity, token, expireTime);
+            logger.info("Cache token is used, token: " + token);
+        } catch (AuthenticationException e) {
+            tokenEntity = this.getTokenService().getByUserId(userId);
+            isTokenValid = checkToken(tokenEntity, token, expireTime);
+            logger.info("DB token is used, token: " + token);
+        }
+        UserEntity user = new UserEntity();
+        if (isTokenValid) {
+            try {
+                user = this.getUserService().getUserById(userId);
+                if (user == null) {
+                    throw new BadCredentialsException("Cannot find user by this token!");
+                }
+            } catch (UsernameNotFoundException e) {
+                logger.error("Cannot find user by this token!");
                 throw new BadCredentialsException("Cannot find user by this token!");
             }
-        } catch (UsernameNotFoundException e) {
-            logger.error("Cannot find user by this token!");
-            throw new BadCredentialsException("Cannot find user by this token!");
         }
-        //加上缓存功能以后，应当可以从缓存中直接查看是否有该token并进行鉴权，缓存由AuthController 更新
-        TokenEntity tokenEntity = this.getTokenService().getByToken(token);
-        if (tokenEntity == null) {
-            throw new BadCredentialsException("Illegal token, access denied!");
-        } else if (tokenEntity.getExpireTime().after(new Date())) {
-            // user中的password信息需要抹掉
-            user.setPassword("");
-            TokenAuthentication result = new TokenAuthentication(user, authentication, user.getAuthorities());
-            return result;
-        } else {
-            throw new BadCredentialsException("Token has expired!");
-        }
+        // user中的password信息需要抹掉
+        user.setPassword("");
+        TokenAuthentication result = new TokenAuthentication(user, authentication, user.getAuthorities());
+        return result;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
         return TokenAuthentication.class.isAssignableFrom(authentication);
+    }
+
+    public boolean checkToken(TokenEntity tokenEntity, String token, Date expireTime) throws AuthenticationException {
+        if (tokenEntity == null) {
+            throw new BadCredentialsException("Cannot find this token!");
+        }
+        if (!Objects.equals(token, tokenEntity.getToken()) || !expireTime.equals(tokenEntity.getExpireTime())) {
+            throw new BadCredentialsException("Forged token!");
+        }
+        if (tokenEntity.getExpireTime().before(new Date())) {
+            throw new BadCredentialsException("Expired token!");
+        }
+        return true;
     }
 
     public UserService getUserService() {
@@ -91,6 +112,15 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
 
     public TokenAuthenticationProvider setTokenService(TokenService tokenService) {
         this.tokenService = tokenService;
+        return this;
+    }
+
+    public Cache<Integer, TokenEntity> getTokenCache() {
+        return tokenCache;
+    }
+
+    public TokenAuthenticationProvider setTokenCache(Cache<Integer, TokenEntity> tokenCache) {
+        this.tokenCache = tokenCache;
         return this;
     }
 }
