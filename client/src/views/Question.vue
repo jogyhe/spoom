@@ -21,21 +21,14 @@
         },
         mounted() {
             var _this = this
-            axios.get('http://localhost:8080/exam/question/4', {
-                auth: {
-                    username: 'spoomlzx@qq.com',
-                    password: 'asdf'
-                },
-                headers: { 'X-TOKEN': 'admin' }
+            axios.get('http://localhost:8081/exam/question/2', {
+                headers: { 'Token': 'rTrwXSt/f1SQbVNN+Yyk155BklR/C+gcTeJZQCT/kAIoAPx1cKck43DWu4AaY2rcd7s4lwy6dLIiaKmsvtvKXA==' }
+            }).then(function (response) {
+                _this.question = response.data.data
+                console.log(response)
+            }).catch(function (error) {
+                console.log(error)
             })
-                .then(response => {
-                    if (response.data.data) {
-                        _this.question = response.data.data
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                })
         }
     }
 </script>

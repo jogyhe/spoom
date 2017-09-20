@@ -59,6 +59,11 @@ public class TokenAuthenticationProvider implements AuthenticationProvider {
         } catch (AuthenticationException e) {
             tokenEntity = this.getTokenService().getByUserId(userId);
             isTokenValid = checkToken(tokenEntity, token, expireTime);
+            if (tokenCache.get(userId) == null) {
+                tokenCache.put(userId, tokenEntity);
+            } else {
+                tokenCache.replace(userId, tokenEntity);
+            }
             logger.info("DB token is used, token: " + token);
         }
         UserEntity user = new UserEntity();
