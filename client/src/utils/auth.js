@@ -1,11 +1,11 @@
-const TokenKey = process.env.TokenKey
+const TokenKey = process.env.TOKEN_KEY
 
 export function getToken() {
     return localStorage.getItem(TokenKey)
 }
 
 export function setToken(token) {
-    return localStorage.setItem(TokenKey,token)
+    return localStorage.setItem(TokenKey, token)
 }
 
 export function removeToken() {
