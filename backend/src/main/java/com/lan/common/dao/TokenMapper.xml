@@ -28,7 +28,9 @@
     </select>
 
     <select id="getByUserId" resultType="com.lan.common.model.TokenEntity">
-        SELECT <include refid="Base_Column_List"/> FROM token WHERE user_id=#{userId}
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM token WHERE user_id=#{userId}
     </select>
 
     <!--auto generated Code-->
@@ -65,5 +67,10 @@
         </set>
         WHERE `user_id` = #{token.userId,jdbcType=INTEGER}
     </update>
+
+    <delete id="removeToken">
+        DELETE FROM token
+        WHERE user_id = #{userId}
+    </delete>
 </mapper>
 

@@ -7,6 +7,7 @@ import com.lan.common.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class AuthController {
     public Message login(@RequestBody UserEntity user) {
         Message message = new Message(0, "User is not exits");
         UserEntity userEntity = null;
-        
+
         try {
             userEntity = userService.getUserByEmail(user.getEmail());
         } catch (UsernameNotFoundException e) {
@@ -65,6 +66,21 @@ public class AuthController {
             } else {
                 message.setMsg("Password invalid");
             }
+        }
+        return message;
+    }
+
+    @PreAuthorize("#userId==principal.userId")
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public Message logout(@RequestParam Integer userId) {
+        Message message = new Message();
+        try {
+            tokenService.removeToken(userId);
+            message.setMsg("Logout success");
+        } catch (RuntimeException e) {
+            logger.error(e.getClass().getName() + ":" + e.getMessage());
+            message.setCode(0);
+            message.setMsg("Logout failure");
         }
         return message;
     }

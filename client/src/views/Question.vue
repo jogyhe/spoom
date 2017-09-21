@@ -23,8 +23,18 @@
         },
         methods: {
             logout() {
-                removeToken()
-                this.$router.push({ path: '/login' })
+                fetch({
+                    url: '/auth/logout',
+                    method: 'post',
+                    params: { userId: 13 }
+                }).then(response => {
+                    if (response.code === 1) {
+                        removeToken()
+                        this.$router.push({ path: '/login' })
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
             }
         },
         mounted() {
@@ -34,6 +44,8 @@
                 method: 'get'
             }).then(response => {
                 _this.question = response.data
+            }).catch(error => {
+                console.log(error)
             })
         }
     }
