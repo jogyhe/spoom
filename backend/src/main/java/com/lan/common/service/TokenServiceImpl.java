@@ -46,8 +46,19 @@ public class TokenServiceImpl implements TokenService {
     public int updateToken(TokenEntity token) {
         try {
             tokenMapper.updateToken(token);
-
             return token.getUserId();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void removeToken(Integer userId) {
+        try {
+            tokenMapper.removeToken(userId);
+            if (tokenCache.get(userId) != null) {
+                tokenCache.remove(userId);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -95,9 +106,9 @@ public class TokenServiceImpl implements TokenService {
             //更新token
             updateToken(tokenEntity);
         }
-        if(tokenCache.get(userEntity.getUserId())==null){
+        if (tokenCache.get(userEntity.getUserId()) == null) {
             tokenCache.put(userEntity.getUserId(), tokenEntity);
-        }else{
+        } else {
             tokenCache.replace(userEntity.getUserId(), tokenEntity);
         }
         return encryptedToken;

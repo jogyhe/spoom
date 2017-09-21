@@ -3,11 +3,13 @@
         <h1>{{question.content}}</h1>
         <h2>Essential Links</h2>
         <h3>{{question.subjectName}}</h3>
+        <el-button @click="logout">退出</el-button>
     </div>
 </template>
 
 <script>
-    import axios from 'axios'
+    import fetch from '@/utils/fetch'
+    import { removeToken } from '@/utils/auth'
 
     export default {
         name: 'hello',
@@ -19,14 +21,30 @@
                 }
             }
         },
+        methods: {
+            logout() {
+                fetch({
+                    url: '/auth/logout',
+                    method: 'post',
+                    params: { userId: 13 }
+                }).then(response => {
+                    if (response.code === 1) {
+                        removeToken()
+                        this.$router.push({ path: '/login' })
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
+        },
         mounted() {
             var _this = this
-            axios.get('http://localhost:8081/exam/question/2', {
-                headers: { 'Token': 'rTrwXSt/f1SQbVNN+Yyk155BklR/C+gcTeJZQCT/kAIoAPx1cKck43DWu4AaY2rcd7s4lwy6dLIiaKmsvtvKXA==' }
-            }).then(function (response) {
-                _this.question = response.data.data
-                console.log(response)
-            }).catch(function (error) {
+            fetch({
+                url: '/exam/question/2',
+                method: 'get'
+            }).then(response => {
+                _this.question = response.data
+            }).catch(error => {
                 console.log(error)
             })
         }

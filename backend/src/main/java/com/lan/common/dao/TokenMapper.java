@@ -14,4 +14,6 @@ public interface TokenMapper {
     int insertToken(@Param("token") TokenEntity token);
 
     int updateToken(@Param("token") TokenEntity token);
+
+    int removeToken(@Param("userId") Integer userId);
 }
