@@ -4,13 +4,13 @@
             <h3 class="title">系统登录</h3>
             <el-form-item prop="username">
 			    <span class="svg-container svg-container_login">
-                    <icon-svg icon-class="yonghu"/>
+                    <icon-svg icon-class="yonghuming"/>
                 </span>
                 <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="邮箱"/>
             </el-form-item>
             <el-form-item prop="password">
 			    <span class="svg-container">
-                    <icon-svg icon-class="task"></icon-svg>
+                    <icon-svg icon-class="mima"></icon-svg>
                 </span>
                 <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="密码"></el-input>
                 <span class='show-pwd' @click='showPwd'><icon-svg icon-class="yanjing"/></span>

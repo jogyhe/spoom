@@ -5,8 +5,6 @@
 </template>
 
 <script>
-    import './iconfont'
-
     export default {
         name: 'icon',
         props: {
