@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.cache.Cache;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,6 +20,8 @@ public class TokenServiceImpl implements TokenService {
 
     @Autowired
     private TokenMapper tokenMapper;
+    @Autowired
+    private Cache<Integer, TokenEntity> tokenCache;
 
     public TokenEntity getByToken(String token) {
         return tokenMapper.getByToken(token);
@@ -43,8 +46,19 @@ public class TokenServiceImpl implements TokenService {
     public int updateToken(TokenEntity token) {
         try {
             tokenMapper.updateToken(token);
-
             return token.getUserId();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void removeToken(Integer userId) {
+        try {
+            tokenMapper.removeToken(userId);
+            if (tokenCache.get(userId) != null) {
+                tokenCache.remove(userId);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -67,7 +81,7 @@ public class TokenServiceImpl implements TokenService {
         Date expireTime = new Date(now.getTime() + 3600 * 12 * 1000);
         logger.info("ExpireTime: " + expireTime.getTime());
 
-        String encryptedToken = token + "#" + userEntity.getEmail() + "#" + expireTime.getTime();
+        String encryptedToken = token + "#" + userEntity.getUserId() + "#" + expireTime.getTime();
         try {
             encryptedToken = Encrypt.aesEncrypt(encryptedToken);
             logger.info("Return token is: " + encryptedToken);
@@ -91,6 +105,11 @@ public class TokenServiceImpl implements TokenService {
             tokenEntity.setExpireTime(expireTime);
             //更新token
             updateToken(tokenEntity);
+        }
+        if (tokenCache.get(userEntity.getUserId()) == null) {
+            tokenCache.put(userEntity.getUserId(), tokenEntity);
+        } else {
+            tokenCache.replace(userEntity.getUserId(), tokenEntity);
         }
         return encryptedToken;
     }

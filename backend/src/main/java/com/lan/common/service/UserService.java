@@ -10,6 +10,8 @@ import com.lan.common.model.UserEntity;
  */
 public interface UserService {
 
+    UserEntity getUserById(Integer userId);
+
     UserEntity getUserByEmail(String email);
 
     void regUser(UserEntity user);

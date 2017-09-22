@@ -13,5 +13,7 @@ public interface TokenService {
 
     int updateToken(TokenEntity token);
 
+    void removeToken(Integer userId);
+
     String createToken(UserEntity userEntity);
 }

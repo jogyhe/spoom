@@ -22,7 +22,7 @@ public class AccessDeniedEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        Message message = new Message(0, "Anonymous denied!");
+        Message message = new Message(1001, "Anonymous denied!");
         response.getWriter().write(JSON.toJSONString(message, SerializerFeature.WriteMapNullValue));
         response.getWriter().close();
     }

@@ -31,20 +31,28 @@
     </sql>
 
     <select id="getUserByEmail" resultType="com.lan.common.model.UserEntity">
-        SELECT <include refid="Base_Column_List"/> FROM user WHERE user.email = #{email}
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user WHERE user.email = #{email}
+    </select>
+
+    <select id="getUserById" resultType="com.lan.common.model.UserEntity">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user WHERE user.user_id=#{userId}
     </select>
 
     <update id="updateUser">
         UPDATE user
         <set>
-            <if test="user.email != null"> `email` = #{user.email}, </if>
-            <if test="user.nickName != null"> `nick_name` = #{user.nickName}, </if>
-            <if test="user.password != null"> `password` = #{user.password}, </if>
-            <if test="user.roles != null"> `roles` = #{user.roles}, </if>
-            <if test="user.enabled != null"> `enabled` = #{user.enabled}, </if>
-            <if test="user.lastLoginTime != null"> `last_login_time` = #{user.lastLoginTime}, </if>
-            <if test="user.avatar != null"> `avatar` = #{user.avatar}, </if>
-            <if test="user.gender != null"> `gender` = #{user.gender} </if>
+            <if test="user.email != null">`email` = #{user.email},</if>
+            <if test="user.nickName != null">`nick_name` = #{user.nickName},</if>
+            <if test="user.password != null">`password` = #{user.password},</if>
+            <if test="user.roles != null">`roles` = #{user.roles},</if>
+            <if test="user.enabled != null">`enabled` = #{user.enabled},</if>
+            <if test="user.lastLoginTime != null">`last_login_time` = #{user.lastLoginTime},</if>
+            <if test="user.avatar != null">`avatar` = #{user.avatar},</if>
+            <if test="user.gender != null">`gender` = #{user.gender}</if>
         </set>
         WHERE `user_id` = #{user.userId}
     </update>
@@ -52,16 +60,16 @@
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="user.userId">
         INSERT INTO user
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="user.userId!=null"> `user_id`,</if>
-            <if test="user.email!=null"> `email`,</if>
-            <if test="user.nickName!=null"> `nick_name`,</if>
-            <if test="user.password!=null"> `password`,</if>
-            <if test="user.roles!=null"> `roles`,</if>
-            <if test="user.createTime!=null"> `create_time`,</if>
-            <if test="user.enabled!=null"> `enabled`,</if>
-            <if test="user.lastLoginTime!=null"> `last_login_time`,</if>
-            <if test="user.avatar!=null"> `avatar`,</if>
-            <if test="user.gender!=null"> `gender`,</if>
+            <if test="user.userId!=null">`user_id`,</if>
+            <if test="user.email!=null">`email`,</if>
+            <if test="user.nickName!=null">`nick_name`,</if>
+            <if test="user.password!=null">`password`,</if>
+            <if test="user.roles!=null">`roles`,</if>
+            <if test="user.createTime!=null">`create_time`,</if>
+            <if test="user.enabled!=null">`enabled`,</if>
+            <if test="user.lastLoginTime!=null">`last_login_time`,</if>
+            <if test="user.avatar!=null">`avatar`,</if>
+            <if test="user.gender!=null">`gender`,</if>
         </trim>
         VALUES
         <trim prefix="(" suffix=")" suffixOverrides=",">

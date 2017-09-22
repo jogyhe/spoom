@@ -2,18 +2,13 @@
     <div class="hello">
         <h1>{{ msg }}</h1>
         <h2>Essential Links</h2>
-        <icon icon-class="delete"></icon>
+        <icon-svg icon-class="delete"></icon-svg>
     </div>
 </template>
 
 <script>
-    import Icon from '@/components/Icon'
-
     export default {
         name: 'hello',
-        components: {
-            Icon
-        },
         data() {
             return {
                 msg: 'Welcome to Your Vue.js App'

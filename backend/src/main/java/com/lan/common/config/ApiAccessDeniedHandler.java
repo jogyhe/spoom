@@ -24,7 +24,7 @@ public class ApiAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
-        Message message = new Message(0, "Insufficient permissions!");
+        Message message = new Message(1001, "Insufficient permissions!");
         response.getWriter().write(JSON.toJSONString(message, SerializerFeature.WriteMapNullValue));
         response.getWriter().close();
     }

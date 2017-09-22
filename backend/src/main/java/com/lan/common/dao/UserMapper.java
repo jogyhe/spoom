@@ -13,6 +13,8 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
 
+    UserEntity getUserById(Integer userId);
+
     UserEntity getUserByEmail(String email);
 
     int updateUser(@Param("user") UserEntity user);

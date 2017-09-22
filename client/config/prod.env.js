@@ -1,5 +1,5 @@
 module.exports = {
     NODE_ENV: '"production"',
-    BASE_API: '"https://localhost"',
-    TOKEN_KEY: '"Admin-Token"'
+    BASE_API: '"http://localhost:8081"',
+    TOKEN_KEY: '"Token"'
 }
