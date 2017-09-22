@@ -12,23 +12,19 @@
 			    <span class="svg-container">
                     <icon-svg icon-class="task"></icon-svg>
                 </span>
-                <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="密码"></el-input>
+                <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="密码"></el-input>
+                <span class='show-pwd' @click='showPwd'><icon-svg icon-class="yanjing"/></span>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
                     登录
                 </el-button>
             </el-form-item>
-            <div class='tips'>账号:admin 密码随便填</div>
-            <div class='tips'>账号:editor 密码随便填</div>
         </el-form>
     </div>
 </template>
 
 <script>
-    import fetch from '@/utils/fetch'
-    import { setToken } from '@/utils/auth'
-
     export default {
         name: 'login',
         data() {
@@ -47,27 +43,30 @@
                         trigger: 'blur'
                     }]
                 },
+                pwdType: 'password',
                 loading: false
             }
         },
         methods: {
+            showPwd() {
+                if (this.pwdType === 'password') {
+                    this.pwdType = ''
+                } else {
+                    this.pwdType = 'password'
+                }
+            },
             handleLogin() {
                 this.$refs.loginForm.validate(valid => {
                     if (valid) {
                         this.loading = true
-                        fetch({
-                            url: '/auth/login',
-                            method: 'post',
-                            data: { email: 'admin@qq.com', password: 'asdf' }
-                        }).then(response => {
-                            if (response.code === 1) {
-                                setToken(response.data)
-                            }
-                            this.loading = false
-                            this.$router.push({ path: '/' })
-                        }).catch(error => {
-                            console.log(error)
-                        })
+                        this.$store.dispatch('LoginByEmail', this.loginForm)
+                            .then(() => {
+                                this.loading = false
+                                this.$router.push({ path: '/' })
+                            })
+                            .catch(() => {
+                                this.loading = false
+                            })
                     } else {
                         console.log('error submit!!')
                         return false

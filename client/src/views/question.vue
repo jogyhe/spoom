@@ -9,7 +9,6 @@
 
 <script>
     import fetch from '@/utils/fetch'
-    import { removeToken } from '@/utils/auth'
 
     export default {
         name: 'hello',
@@ -23,17 +22,10 @@
         },
         methods: {
             logout() {
-                fetch({
-                    url: '/auth/logout',
-                    method: 'post'
-                }).then(response => {
-                    if (response.code === 1) {
-                        removeToken()
-                        this.$router.push({ path: '/login' })
-                    }
-                }).catch(error => {
-                    console.log(error)
-                })
+                this.$store.dispatch('Logout')
+                    .then(() => {
+                        location.reload()
+                    })
             }
         },
         mounted() {

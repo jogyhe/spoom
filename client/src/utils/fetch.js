@@ -1,17 +1,16 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import { getToken, removeToken } from '@/utils/auth'
+import store from '@/store'
+import { getToken } from './auth'
 
-const service = axios.create({
+const fetch = axios.create({
     baseURL: process.env.BASE_API,
     timeout: 5000
 })
 
-service.interceptors.request.use(config => {
-    // config.headers['Token'] = getToken()
-    const token = getToken()
-    if (token) {
-        config.headers['Token'] = token
+fetch.interceptors.request.use(config => {
+    if (store.getters.token) {
+        config.headers['Token'] = getToken()
     }
     return config
 }, error => {
@@ -19,18 +18,19 @@ service.interceptors.request.use(config => {
     Promise.reject(error)
 })
 
-service.interceptors.response.use(response => {
-    /**
-     * code为1001,说明token失效或者没有携带token
-     */
+fetch.interceptors.response.use(response => {
     const res = response.data
     if (res == null) {
         return Promise.reject('error')
     }
+    /**
+     * code为1001,说明token失效或者没有携带token,前端登出
+     */
     if (res.code === 1001) {
-        removeToken()
-        location.reload() // 如果发现localStorage中的token无效，则删除并跳转到login页面
-        return Promise.reject('error')
+        store.dispatch('FedLogout')
+            .then(() => {
+                location.reload()
+            })
     }
     return res
 }, error => {
@@ -42,4 +42,4 @@ service.interceptors.response.use(response => {
     })
     return Promise.reject(error)
 })
-export default service
+export default fetch
