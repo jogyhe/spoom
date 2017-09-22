@@ -25,8 +25,7 @@
             logout() {
                 fetch({
                     url: '/auth/logout',
-                    method: 'post',
-                    params: { userId: 13 }
+                    method: 'post'
                 }).then(response => {
                     if (response.code === 1) {
                         removeToken()

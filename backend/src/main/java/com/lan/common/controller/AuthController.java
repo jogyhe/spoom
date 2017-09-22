@@ -7,7 +7,7 @@ import com.lan.common.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -70,12 +70,11 @@ public class AuthController {
         return message;
     }
 
-    @PreAuthorize("#userId==principal.userId")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
-    public Message logout(@RequestParam Integer userId) {
+    public Message logout(@AuthenticationPrincipal UserEntity userEntity) {
         Message message = new Message();
         try {
-            tokenService.removeToken(userId);
+            tokenService.removeToken(userEntity.getUserId());
             message.setMsg("Logout success");
         } catch (RuntimeException e) {
             logger.error(e.getClass().getName() + ":" + e.getMessage());
