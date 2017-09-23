@@ -66,13 +66,17 @@ const user = {
         GetUserInfo({ commit, state }) {
             return new Promise((resolve, reject) => {
                 getUserInfo(state.token).then(response => {
-                    const user = response.data
-                    commit('SET_EMAIL', user.email)
-                    commit('SET_ROLES', user.role)
-                    commit('SET_NICKNAME', user.nickName)
-                    commit('SET_AVATAR', user.avatar)
-                    commit('SET_GENDER', user.gender)
-                    resolve(response)
+                    if (response.code === 1) {
+                        const user = response.data
+                        commit('SET_EMAIL', user.email)
+                        commit('SET_ROLES', user.roles)
+                        commit('SET_NICKNAME', user.nickName)
+                        commit('SET_AVATAR', user.avatar)
+                        commit('SET_GENDER', user.gender)
+                        resolve(response)
+                    } else {
+                        reject('error')
+                    }
                 }).catch(error => {
                     reject(error)
                 })
@@ -80,7 +84,7 @@ const user = {
         },
 
         // 登出
-        Logout({ commit, state }) {
+        Logout({ commit }) {
             return new Promise((resolve, reject) => {
                 logout().then(() => {
                     commit('SET_TOKEN', '')

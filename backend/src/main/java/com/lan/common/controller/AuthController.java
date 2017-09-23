@@ -73,6 +73,11 @@ public class AuthController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Message logout(@AuthenticationPrincipal UserEntity userEntity) {
         Message message = new Message();
+        if (userEntity == null) {
+            message.setCode(0);
+            message.setMsg("Token is valid,logout failure");
+            return message;
+        }
         try {
             tokenService.removeToken(userEntity.getUserId());
             message.setMsg("Logout success");

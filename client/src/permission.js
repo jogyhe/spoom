@@ -1,4 +1,5 @@
 import router from './router'
+import store from './store'
 import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import { getToken } from '@/utils/auth' // 验权
@@ -10,7 +11,25 @@ router.beforeEach((to, from, next) => {
         if (to.path === '/login') {
             next({ path: '/' })
         } else {
-            next()
+            if (store.getters.roles.length === 0) {
+                store.dispatch('GetUserInfo')
+                    .then(res => {
+                        const roles = res.data.roles
+                        store.dispatch('GenerateRouters', roles)
+                            .then(() => {
+                                router.addRoutes(store.getters.addRouters)
+                                next({ ...to })
+                            })
+                    })
+                    .catch(() => {
+                        store.dispatch('FedLogout')
+                            .then(() => {
+                                location.reload()
+                            })
+                    })
+            } else {
+                next()
+            }
         }
     } else {
         if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入

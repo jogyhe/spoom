@@ -4,16 +4,16 @@
             <h3 class="title">系统登录</h3>
             <el-form-item prop="username">
 			    <span class="svg-container svg-container_login">
-                    <icon-svg icon-class="yonghuming"/>
+                    <icon-svg icon-class="account"/>
                 </span>
                 <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="邮箱"/>
             </el-form-item>
             <el-form-item prop="password">
 			    <span class="svg-container">
-                    <icon-svg icon-class="mima"></icon-svg>
+                    <icon-svg icon-class="password"></icon-svg>
                 </span>
                 <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="密码"></el-input>
-                <span class='show-pwd' @click='showPwd'><icon-svg icon-class="yanjing"/></span>
+                <span class='show-pwd' @click='showPwd'><icon-svg icon-class="browse"/></span>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" style="width:100%;" :loading="loading" @click.native.prevent="handleLogin">
@@ -81,7 +81,7 @@
     @import "src/styles/mixin.scss";
 
     $bg: #2d3a4b;
-    $dark_gray: #889aa4;
+    $dark_gray: #e1e1e1;
     $light_gray: #eee;
 
     .login-container {
@@ -117,9 +117,7 @@
             vertical-align: middle;
             width: 30px;
             display: inline-block;
-            &_login {
-                font-size: 20px;
-            }
+            font-size: 16px;
         }
         .title {
             font-size: 26px;

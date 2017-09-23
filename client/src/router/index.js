@@ -3,15 +3,23 @@ import Router from 'vue-router'
 
 const _import = require('./_import_' + process.env.NODE_ENV)
 
-export const constantRouterMap = [{
-    path: '/login',
-    component: _import('login/index'),
-    hidden: true
-}, {
-    path: '/',
-    component: _import('question'),
-    hidden: true
-}]
+export const constantRouterMap = [
+    {
+        path: '/login',
+        component: _import('login/index'),
+        hidden: true
+    },
+    {
+        path: '/404',
+        component: _import('errorPage/404'),
+        hidden: true
+    },
+    {
+        path: '/',
+        component: _import('question'),
+        hidden: true
+    }
+]
 
 Vue.use(Router)
 export default new Router({
