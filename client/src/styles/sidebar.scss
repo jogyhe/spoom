@@ -10,7 +10,7 @@
 
 .hideSidebar .el-submenu > .el-submenu__title,
 .hideSidebar .submenu-title-noDropdown {
-    padding-left: 10px !important;
+    //padding-left: 10px !important;
 }
 
 .hideSidebar .submenu-title-noDropdown span,
@@ -74,4 +74,19 @@
 
 .el-submenu .el-menu-item {
     min-width: 180px !important;
+}
+
+.el-menu--horizontal .el-submenu {
+    .el-submenu__title {
+        height: 50px;
+        line-height: 50px;
+        padding: 0 10px;
+    }
+    & > .el-menu {
+        top: 50px
+    }
+}
+
+.el-menu--horizontal > .el-submenu:hover .el-submenu__title {
+    border-bottom: 2px solid #20a0ff;
 }

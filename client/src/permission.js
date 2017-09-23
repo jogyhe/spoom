@@ -4,6 +4,12 @@ import NProgress from 'nprogress' // Progress 进度条
 import 'nprogress/nprogress.css' // Progress 进度条样式
 import { getToken } from '@/utils/auth' // 验权
 
+function hasPermission(roles, permissionRoles) {
+    if (roles.indexOf('ADMIN') >= 0) return true // ADMIN权限 直接通过
+    if (!permissionRoles) return true
+    return permissionRoles.indexOf(roles) >= 0
+}
+
 const whiteList = ['/login', '/authredirect']// 不重定向白名单
 router.beforeEach((to, from, next) => {
     NProgress.start() // 开启Progress
@@ -17,7 +23,7 @@ router.beforeEach((to, from, next) => {
                         const roles = res.data.roles
                         store.dispatch('GenerateRouters', roles)
                             .then(() => {
-                                router.addRoutes(store.getters.addRouters)
+                                router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
                                 next({ ...to })
                             })
                     })
@@ -28,7 +34,11 @@ router.beforeEach((to, from, next) => {
                             })
                     })
             } else {
-                next()
+                if (hasPermission(store.getters.roles, to.meta.role)) {
+                    next()
+                } else {
+                    next({ path: '/404', query: { noGoBack: true } })
+                }
             }
         }
     } else {
