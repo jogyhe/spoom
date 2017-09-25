@@ -1,5 +1,6 @@
 <template>
     <el-menu class="navbar" mode="horizontal">
+        <el-button style="margin-left: 200px" @click="toggleSideBar">toggle</el-button>
         <el-submenu class="avatar-container" index="2">
             <template slot="title">
                 <img class="user-avatar" :src="avatar">
@@ -24,6 +25,9 @@
             ])
         },
         methods: {
+            toggleSideBar() {
+                this.$store.dispatch('ToggleSideBar')
+            },
             logout() {
                 this.$store.dispatch('Logout').then(() => {
                     location.reload()// 为了重新实例化vue-router对象 避免bug
